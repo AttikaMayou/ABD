@@ -23,10 +23,15 @@ public class PlayerMovements : MonoBehaviour
     private bool IsWalking;
     private bool IsRunning;
 
+    //CAMERA
+    [SerializeField]
+    private GameObject cameraRotatorX;
 
     // Deux floats pour faire avancer : Horizontal = walk devant derriere / Vertical = walk gauche droite
     private float Forward;
     private float Strafe;
+
+    private float rotationSpeed=3;
 
 
     // Use this for initialization
@@ -41,11 +46,17 @@ public class PlayerMovements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //CAMERA
+        transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X") * rotationSpeed, 0));
+        cameraRotatorX.transform.Rotate(new Vector3(-(Input.GetAxis("Mouse Y") * rotationSpeed), 0, 0), Space.Self);
+
         // Récupération des floats vertical et horizontal de l'animator au script
         Forward = Input.GetAxis("Vertical");
         Strafe = Input.GetAxis("Horizontal");
 
-        var movement = new Vector3(Strafe, 0, Forward);
+        Vector2 inputAxis = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //var movement = new Vector3(Strafe, 0, Forward);
+        var movement = transform.forward * inputAxis.normalized.y + transform.right * inputAxis.normalized.x;
 
         //Running
         if (Input.GetKey(KeyCode.LeftShift))
@@ -82,8 +93,6 @@ public class PlayerMovements : MonoBehaviour
            
 
     }
-
-
 
 }
 
