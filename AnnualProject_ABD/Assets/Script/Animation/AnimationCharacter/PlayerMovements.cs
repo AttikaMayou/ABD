@@ -7,8 +7,6 @@ public class PlayerMovements : MonoBehaviour
     [Tooltip("Player")]
     private CharacterController Character;
 
-    [SerializeField]
-    [Tooltip("Vitesse de la marche")]
     private float moveSpeed=3f;
 
     [SerializeField]
@@ -16,12 +14,23 @@ public class PlayerMovements : MonoBehaviour
     private float runSpeed;
 
     [SerializeField]
-    [Tooltip("Vitesse de la course")]
+    [Tooltip("Vitesse de la marche")]
     private float WalkSpeed;
+
+    [SerializeField]
+    [Tooltip("Gravité")]
+    public float gravity = 20.0F;
+
+    [SerializeField]
+    [Tooltip("Vitesse du saut")]
+    public float JumpSpeed;
 
     private Animator anim;
     private bool IsWalking;
     private bool IsRunning;
+    private bool IsJumping;
+    int jumpHash = Animator.StringToHash("Jump");
+    private Vector3 movement = Vector3.zero;
 
     //CAMERA
     [SerializeField]
@@ -31,6 +40,7 @@ public class PlayerMovements : MonoBehaviour
     private float Forward;
     private float Strafe;
 
+    //CAMERA
     private float rotationSpeed=3;
 
 
@@ -38,9 +48,10 @@ public class PlayerMovements : MonoBehaviour
     void Start()
     {
         Character = GetComponent<CharacterController>();
-        WalkSpeed = moveSpeed * 100;
-        runSpeed = runSpeed * 100;
+        WalkSpeed = moveSpeed * 1;
+        runSpeed = runSpeed * 1;
         anim = GetComponentInChildren<Animator>();
+        gameObject.transform.position = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -54,42 +65,87 @@ public class PlayerMovements : MonoBehaviour
         Forward = Input.GetAxis("Vertical");
         Strafe = Input.GetAxis("Horizontal");
 
-        Vector2 inputAxis = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        //var movement = new Vector3(Strafe, 0, Forward);
-        var movement = transform.forward * inputAxis.normalized.y + transform.right * inputAxis.normalized.x;
-
-        //Running
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Character.isGrounded)
         {
-            if (Forward!=0)
-            {
-                anim.SetBool("IsRunning", true);
-                anim.SetBool("IsWalking", false);
-                moveSpeed = runSpeed;
-            }
-        }
-        else
-        {
-            //Walking
-            if(Forward!=0)
-            {
-                anim.SetBool("IsRunning", false);
-                anim.SetBool("IsWalking", true);
-                moveSpeed = WalkSpeed;
-            }
-            //Iddle
-            if(Forward==0)
-            {
-                anim.SetBool("IsRunning", false);
-                anim.SetBool("IsWalking", false);
-                moveSpeed = 0;
-            }
-        }
+            movement = new Vector3(Strafe, 0.0f, Forward);
+            movement = transform.TransformDirection(movement);
+            movement = movement * moveSpeed;
+            anim.SetFloat("Forward", Forward);
 
-        //* delta time pour que tous les joueurs est le même speed
-        Character.SimpleMove(movement * Time.deltaTime * moveSpeed);
-        anim.SetFloat("Forward", movement.magnitude);
+            //Running
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (Forward != 0)
+                {
+                    anim.SetBool("IsRunning", true);
+                    anim.SetBool("IsWalking", false);
+                    moveSpeed = runSpeed;
 
+                    //jump from Running
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        movement.y = JumpSpeed;
+                        anim.SetBool("IsJumping", true);
+
+                        Debug.Log("SAUT");
+                    }
+                    else
+                    {
+                        anim.SetBool("IsJumping", false);
+                    }
+                }
+            }
+            else
+            {
+                //Walking
+                if (Forward != 0)
+                {
+                    anim.SetBool("IsRunning", false);
+                    anim.SetBool("IsWalking", true);
+                    moveSpeed = WalkSpeed;
+
+                    //jump from Walking
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        movement.y = JumpSpeed;
+                        anim.SetBool("IsJumping", true);
+                    }
+                    else
+                    {
+                        anim.SetBool("IsJumping", false);
+                    }
+                }
+                //Iddle
+                if (Forward == 0)
+                {
+                    anim.SetBool("IsRunning", false);
+                    anim.SetBool("IsWalking", false);
+                    moveSpeed = 0;
+                    //Crouch from Iddle
+                    if(Input.GetKey(KeyCode.LeftControl))
+                    {
+                        
+
+                    }
+                        //jump from Iddle
+                        if (Input.GetKey(KeyCode.Space))
+                    {
+                        movement.y = JumpSpeed;
+                        anim.SetBool("IsJumping", true);
+                        Debug.Log("SAUT");
+                    }
+                    else
+                    {
+                        anim.SetBool("IsJumping", false);
+                    }
+                }
+            }
+
+            
+        }
+  
+        movement.y = movement.y - (gravity * Time.deltaTime);
+        Character.Move(movement * Time.deltaTime);
     }
 
 }
