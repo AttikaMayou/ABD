@@ -90,8 +90,6 @@ public class PlayerMovements : MonoBehaviour
         Character.SimpleMove(movement * Time.deltaTime * moveSpeed);
         anim.SetFloat("Forward", movement.magnitude);
 
-           
-
     }
 
 }
