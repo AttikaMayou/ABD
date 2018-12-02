@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3f31b00e95fdafd44992133cfc0f2df5
+guid: ac5eaf743a7c87642a3f243d3aba134c
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -70,9 +70,9 @@ ModelImporter:
     100128: mixamorig:Spine
     100130: mixamorig:Spine1
     100132: mixamorig:Spine2
-    100134: //RootNode
-    100136: Shoes
-    100138: Tops
+    100134: Shoes
+    100136: Tops
+    100138: //RootNode
     400000: Body
     400002: Bottoms
     400004: mixamorig:Head
@@ -140,9 +140,9 @@ ModelImporter:
     400128: mixamorig:Spine
     400130: mixamorig:Spine1
     400132: mixamorig:Spine2
-    400134: //RootNode
-    400136: Shoes
-    400138: Tops
+    400134: Shoes
+    400136: Tops
+    400138: //RootNode
     2100000: No Name
     2100002: lambert1
     4300000: Body
@@ -183,35 +183,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Take 001
-      takeName: Take 001
-      firstFrame: 0
-      lastFrame: 20
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
