@@ -67,10 +67,22 @@ public class PlayerMovements : MonoBehaviour
 
         if (Character.isGrounded)
         {
+            anim.SetFloat("Forward", Forward);
+            anim.SetFloat("Strafe", Strafe);
             movement = new Vector3(Strafe, 0.0f, Forward);
             movement = transform.TransformDirection(movement);
             movement = movement * moveSpeed;
-            anim.SetFloat("Forward", Forward);
+
+            //Strafe Left
+            if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))
+            {
+                Character.Move(Vector3.left * 30 * Time.deltaTime);
+            }
+           //Strafe right
+           if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                Character.Move(Vector3.right * 30 * Time.deltaTime);
+            }
 
             //Running
             if (Input.GetKey(KeyCode.LeftShift))
@@ -121,12 +133,12 @@ public class PlayerMovements : MonoBehaviour
                     anim.SetBool("IsRunning", false);
                     anim.SetBool("IsWalking", false);
                     moveSpeed = 0;
-                    //Crouch from Iddle
+                   /* //Crouch from Iddle
                     if(Input.GetKey(KeyCode.LeftControl))
                     {
                         
 
-                    }
+                    }*/
                         //jump from Iddle
                         if (Input.GetKey(KeyCode.Space))
                     {
